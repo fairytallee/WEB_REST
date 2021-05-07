@@ -15,9 +15,15 @@ class InMemoryPostsRepo:
     def get_by_username(self, username):
         result = []
         for value in self.by_id.values():
-            value.author.username = username
-            result.append(value)
+            if value.author.username == username:
+                result.append(value)
+        return tuple(result)
 
+    def get_by_category(self, category):
+        result = []
+        for value in self.by_id.values():
+            if value.category == category:
+                result.append(value)
         return tuple(result)
 
     def request_create(self, post):
@@ -37,5 +43,4 @@ class InMemoryPostsRepo:
             return f"you aren't author of this post id: {post_id}"
 
         del self.by_id[post_id]
-
         return None

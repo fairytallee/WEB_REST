@@ -26,8 +26,10 @@ app.jwt = JWTManager(app)
 app.user_repo.request_create("who", "12345678")
 
 
-@app.route("/")
-def root():
+@app.route("/", defaults={"path": ""})
+@app.route("/u/<path:path>")
+@app.route("/a/<path:path>")
+def root(path):
     return app.send_static_file("index.html")
 
 
@@ -102,9 +104,14 @@ def delete_post_by_id(post_id):
         return make_resp(jsonify({'message': 'success'}), 200)
 
 
-@app.route('api/user/<username>', methods=['GET'])
+@app.route('/api/user/<username>', methods=['GET'])
 def get_post_by_username(username):
     return make_resp(jsonify(app.post_repo.get_by_username(username)), 200)
+
+
+@app.route('/api/posts/<category>', methods=['GET'])
+def get_post_by_category(category):
+    return make_resp(jsonify(app.post_repo.get_by_category(category)), 200)
 
 
 if __name__ == '__main__':
